@@ -1,0 +1,28 @@
+=== STEP 2: COMPARE EXISTING PREDICTORS ===
+Benchmark Trace,Predictor Model,Cumulative IPC,Branch Accuracy (%),Misprediction Rate (%),L1I Miss Rate (%),LLC Miss Rate (%)
+602.gcc_s-1850B,Bimodal,0.280651,92.2655%,7.7345%,0.42%,22.14%
+602.gcc_s-1850B,GShare,0.285412,93.8140%,6.1860%,0.41%,22.12%
+602.gcc_s-1850B,Perceptron,0.291083,94.9215%,5.0785%,0.40%,22.10%
+605.mcf_s-1554B,Bimodal,0.145917,97.6028%,2.3972%,0.02%,81.35%
+605.mcf_s-1554B,GShare,0.146002,97.8115%,2.1885%,0.02%,81.34%
+605.mcf_s-1554B,Perceptron,0.146124,98.0142%,1.9858%,0.02%,81.33%
+625.x264_s-12B,Bimodal,1.573430,88.6188%,11.3812%,0.08%,3.82%
+625.x264_s-12B,GShare,1.684120,91.2405%,8.7595%,0.08%,3.79%
+625.x264_s-12B,Perceptron,1.741290,93.4182%,6.5818%,0.07%,3.78%
+
+=== STEP 3: 2-BIT PREDICTOR IMPLEMENTATION VS EXISTING ===
+Benchmark Trace,Predictor Model,Cumulative IPC,Branch Accuracy (%),Mispredictions,Misprediction Rate (%)
+605.mcf_s-1554B,Existing (Bimodal),0.145917,97.6028%,43561,2.3972%
+605.mcf_s-1554B,Your 2-Bit (my_bimodal),0.145917,97.6028%,43561,2.3972%
+602.gcc_s-1850B,Existing (Bimodal),0.280651,92.2655%,198289,7.7345%
+602.gcc_s-1850B,Your 2-Bit (my_bimodal),0.280651,92.2655%,198289,7.7345%
+625.x264_s-12B,Existing (Bimodal),1.573430,88.6188%,48348,11.3812%
+625.x264_s-12B,Your 2-Bit (my_bimodal),1.571650,88.5682%,48563,11.4318%
+
+=== STEP 4: TABLE CAPACITY EVALUATION (602.gcc_s-1850B) ===
+Table Size,Index Bits,Cumulative IPC,Branch Accuracy (%),Mispredictions,Misprediction Rate (%)
+1K,10-bit,0.280656,92.2665%,198265,7.7335%
+2K,11-bit,0.280656,92.2665%,198265,7.7335%
+4K,12-bit,0.280656,92.2665%,198265,7.7335%
+8K,13-bit,0.280656,92.2665%,198265,7.7335%
+16K,14-bit,0.280656,92.2665%,198265,7.7335%

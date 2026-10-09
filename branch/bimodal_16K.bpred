@@ -1,0 +1,32 @@
+#include <cstdint>
+#include <cstdlib>
+#include "ooo_cpu.h"
+
+#define TABLE_BITS 14
+#define TABLE_ENTRIES (1 << TABLE_BITS)
+
+uint8_t pht[NUM_CPUS][TABLE_ENTRIES];
+
+void O3_CPU::initialize_branch_predictor()
+{
+    for (uint32_t i = 0; i < TABLE_ENTRIES; i++)
+        pht[cpu][i] = 2; // Weakly Taken
+}
+
+uint8_t O3_CPU::predict_branch(uint64_t ip)
+{
+    uint32_t index = ip & (TABLE_ENTRIES - 1);
+    return (pht[cpu][index] >= 2) ? 1 : 0;
+}
+
+void O3_CPU::last_branch_result(uint64_t ip, uint8_t taken)
+{
+    uint32_t index = ip & (TABLE_ENTRIES - 1);
+    uint8_t state = pht[cpu][index];
+
+    if (taken) {
+        if (state < 3) pht[cpu][index] = state + 1;
+    } else {
+        if (state > 0) pht[cpu][index] = state - 1;
+    }
+}
